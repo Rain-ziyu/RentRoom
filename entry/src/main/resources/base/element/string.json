@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "第一次创建的应用"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "硅谷租房"
+    }
+  ]
+}
