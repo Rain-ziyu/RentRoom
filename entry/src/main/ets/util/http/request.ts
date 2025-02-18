@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from '@ohos/axios';
 import promptAction from '@ohos.promptAction';
-import AnyObject from '../models/HttpModel'
+import AnyObject from '../../models/HttpModel'
 const request = axios.create({
   baseURL: ''
 })
