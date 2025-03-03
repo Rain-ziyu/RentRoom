@@ -145,3 +145,52 @@ export  interface  IRoomRecommendItem{
   "rentArea":string
 }
 export type IRoomRecommendList = IRoomRecommendItem[]
+
+
+export class RoomRecommendDataSource implements IDataSource {
+  roomRecommendList: IRoomRecommendList = []
+  listeners: DataChangeListener[] = []
+  constructor(roomRecommendList: IRoomRecommendList) {
+    this.roomRecommendList = roomRecommendList;
+    // 更新所有子组件
+    this.notifyDataReload()
+  }
+
+  getData(index: number) {
+    return this.roomRecommendList[index];
+  }
+
+  totalCount() {
+    return this.roomRecommendList.length;
+  }
+  setList(list: IRoomRecommendList) {
+    this.roomRecommendList = list
+    // 更新所有子组件
+    this.notifyDataReload()
+  }
+
+
+  // 通知LazyForEach组件需要重载所有子组件
+  notifyDataReload(): void {
+    this.listeners.forEach(listener => {
+      listener.onDataReloaded();
+    })
+  }
+  // 该方法为框架侧调用，为LazyForEach组件向其数据源处添加listener监听
+  registerDataChangeListener(listener: DataChangeListener): void {
+    if (this.listeners.indexOf(listener) < 0) {
+      console.info('add listener');
+      this.listeners.push(listener);
+    }
+  }
+
+  // 该方法为框架侧调用，为对应的LazyForEach组件在数据源处去除listener监听
+  unregisterDataChangeListener(listener: DataChangeListener): void {
+    const pos = this.listeners.indexOf(listener);
+    if (pos >= 0) {
+      console.info('remove listener');
+      this.listeners.splice(pos, 1);
+    }
+  }
+
+}

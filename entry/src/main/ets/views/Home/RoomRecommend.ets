@@ -1,6 +1,6 @@
 import { getHomeDataApi, getRoomRecommendListApi } from '../../api/home'
 import { BORDER_RADIUS, PADDING, PADDING_S } from '../../constants/size'
-import type {
+import {
   BannerListDataSource,
   IBannerItem,
   IBannerList,
@@ -9,13 +9,14 @@ import type {
   IRoomRecommendList,
   ITagItem,
   ITileItem,
-  ITileList
+  ITileList,
+  RoomRecommendDataSource
 } from '../../models/HomeData'
 import { RowModifier } from '@kit.ArkUI'
 
 @Component
 export default struct RoomRecommend {
-  @State roomRecommendList: IRoomRecommendList = []
+  @State roomRecommendList: RoomRecommendDataSource =  new RoomRecommendDataSource([])
 
   // 生命周期函数：初始化渲染时触发
   aboutToAppear(): void {
@@ -23,7 +24,8 @@ export default struct RoomRecommend {
   }
 
   getRoomRecommendData = async () => {
-    this.roomRecommendList = await getRoomRecommendListApi()
+    const result = await getRoomRecommendListApi()
+    this.roomRecommendList.setList(result)
     // console.log(JSON.stringify(result))
     // let bannerList = result.bannerList
   }
@@ -47,7 +49,7 @@ export default struct RoomRecommend {
       .backgroundColor($r('app.color.white'))
 
       Grid() {
-        ForEach(this.roomRecommendList, (room: IRoomRecommendItem) => {
+        LazyForEach(this.roomRecommendList, (room: IRoomRecommendItem) => {
           GridItem() {
             Column() {
               Stack() {

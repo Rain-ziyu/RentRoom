@@ -3,11 +3,14 @@ import type { BannerListDataSource, IBannerItem, IBannerList } from '../../model
 
 @Component
 export default struct SearchBar {
+  @Prop bgColor:string
+  @Prop fontColor:string
   build() {
     Row({ space: PADDING }) {
-      Text('北京').fontSize(14).fontColor($r('app.color.white'))
+      Text('北京').fontSize(14).fontColor(this.fontColor)
       Stack() {
         TextInput().width('100%').height('100%').backgroundColor($r('app.color.white'))
+          .border({width:1,color:$r('app.color.gray')})
         Row() {
           Image($r('app.media.search')).width(18).height(18)
           Text('公交、地铁')
@@ -22,10 +25,11 @@ export default struct SearchBar {
         }.width('100%').padding({ left: PADDING, right: PADDING })
       }.width(244)
 
-      Image($r('app.media.message')).width(24).height(24)
+      Image($r('app.media.message')).width(24).height(24).fillColor(this.fontColor)
     }.width('100%')
     .height(38)
-    .padding({ left: PADDING, right: PADDING })
-    .margin({ top: 4 })
+    .padding({ left: PADDING, right: PADDING , top: 4 ,bottom:4})
+
+    .backgroundColor(this.bgColor)
   }
 }

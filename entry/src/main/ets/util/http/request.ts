@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from '@o
 import promptAction from '@ohos.promptAction';
 import AnyObject from '../../models/HttpModel'
 const request = axios.create({
-  baseURL: ''
+  baseURL: 'http://192.168.10.19:6060'
 })
 // 封装请求时的统一配置
 request.interceptors.request.use(
