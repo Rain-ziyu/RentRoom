@@ -3,7 +3,7 @@ import type { BannerListDataSource, IBannerItem, IBannerList } from '../../model
 @Component
 export default struct SwiperLayout {
   @ObjectLink bannerList: BannerListDataSource;
-
+@StorageProp('topHeight') topHeight :number=0;
   build() {
     Swiper() {
       LazyForEach(this.bannerList, (banner: IBannerItem) => {
@@ -11,7 +11,7 @@ export default struct SwiperLayout {
       }, (item: IBannerItem) => item.id + '')
     }
     .width('100%')
-    .height(211 - 36)
+    .height(211-36+this.topHeight)
     .autoPlay(true) //自动滚动
     .interval(1) //1s一次
     .indicator(

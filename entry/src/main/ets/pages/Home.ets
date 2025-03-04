@@ -1,28 +1,49 @@
 import { getHomeDataApi } from "../api/home"
 import { PADDING, SHADOW_RADIUS } from "../constants/size"
-import { BannerListDataSource, IBannerList, INavList, IPlanList, ITileList } from "../models/HomeData"
+import { BannerListDataSource, IBannerList, IColor, INavList, IPlanList, ITileList } from "../models/HomeData"
 import NavList from "../views/Home/NavList"
 import PlanList from "../views/Home/PlanList"
 import RoomRecommend from "../views/Home/RoomRecommend"
 import SearchBar from "../views/Home/SearchBar"
 import SwiperLayout from '../views/Home/SwiperLayout'
 import TileList from "../views/Home/TileList"
-@Preview
+import ScrollContainer from "../components/ScrollContainer/Index"
 @Component
 export default struct Home {
+
   @State bgColor: string = 'rgba(255, 255, 255, 0)'
   @State fontColor: string =  'rgba(255, 255, 255, 1)'
   scrollY:number = 0;
-  handleScroll: ScrollOnScrollCallback = (xOffset: number,yOffset: number)=>{
-    this.scrollY+=yOffset
-    console.log('y轴'+this.scrollY)
-    this.calcColor()
-  }
   @State bannerList: BannerListDataSource = new BannerListDataSource()
   @State navList: INavList = []
   @State tileList: ITileList = []
   @State planList:IPlanList = []
   @State adPicture: string = '';
+  @Builder navBuilder($$: IColor){
+    SearchBar({fontColor:$$.fontColor})
+  }
+  @Builder contentBuilder(){
+    // 轮播图组件 使用prop通信
+    SwiperLayout({ bannerList: this.bannerList })
+    Column() {
+      NavList({ navList: this.navList })
+      TileList({ tileList: this.tileList })
+      PlanList({ planList: this.planList })
+      Image(this.adPicture)
+        .width('100%')
+        .height(60)
+        .objectFit(ImageFit.Fill)
+        .margin({ top: 10 })
+        .shadow({
+          offsetX: 0,
+          offsetY: 0,
+          radius: SHADOW_RADIUS,
+          color: 'rgba(0,0,0,0.14)'
+        })
+    }.margin({ left: PADDING, right: PADDING })
+
+    RoomRecommend()
+  }
   getHomeData = async () => {
     const result = await getHomeDataApi()
     // console.log(JSON.stringify(result))
@@ -111,55 +132,15 @@ export default struct Home {
   aboutToAppear(): void {
     this.getHomeData()
   }
-  // 计算颜色
-  calcColor = () => {
-    // 滚动计算的 scrollY 的值到达顶部可能不是 0，给点误差
-    if (this.scrollY < 10) {
-      this.fontColor = 'rgba(255, 255, 255, 1)'
-      this.bgColor = 'rgba(255, 255, 255, 0)'
-    } else if(this.scrollY<=300){
-      const  colorOpacity = (this.scrollY-10)/(300-10)
-      this.bgColor = `rgba(255, 255, 255, ${colorOpacity})`
-      this.fontColor = `rgba(0, 0, 0,${colorOpacity})`
-    }else {
-      this.fontColor = 'rgb(0, 0, 0)'
-      this.bgColor = 'rgb(255, 255, 255)'
-    }
-    console.log( this.fontColor,this.bgColor)
-  }
-  build() {
-    Stack() {
-      Scroll() {
-          Column() {
-            // 轮播图组件 使用prop通信
-            SwiperLayout({ bannerList: this.bannerList })
-            Column() {
-              NavList({ navList: this.navList })
-              TileList({ tileList: this.tileList })
-              PlanList({ planList: this.planList })
-              Image(this.adPicture)
-                .width('100%')
-                .height(60)
-                .objectFit(ImageFit.Fill)
-                .margin({ top: 10 })
-                .shadow({
-                  offsetX: 0,
-                  offsetY: 0,
-                  radius: SHADOW_RADIUS,
-                  color: 'rgba(0,0,0,0.14)'
-                })
-            }.margin({ left: PADDING, right: PADDING })
 
-            RoomRecommend()
-          }
-          .width('100%').justifyContent(FlexAlign.Start)
+  build() {
+    ScrollContainer({
+      navBuilderParam:
+        this.navBuilder
+      ,
+      contentBuilderParam:()=>{
+        this.contentBuilder()
       }
-      .width('100%')
-      .height('100%')
-      .scrollBar(BarState.Off)
-      .align(Alignment.TopStart)
-      .onDidScroll(this.handleScroll)
-      SearchBar({fontColor:this.fontColor,bgColor: this.bgColor})
-    }.width('100%').height('100%').align(Alignment.TopStart)
+    })
   }
 }

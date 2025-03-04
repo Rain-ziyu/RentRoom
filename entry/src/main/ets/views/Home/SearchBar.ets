@@ -3,7 +3,6 @@ import type { BannerListDataSource, IBannerItem, IBannerList } from '../../model
 
 @Component
 export default struct SearchBar {
-  @Prop bgColor:string
   @Prop fontColor:string
   build() {
     Row({ space: PADDING }) {
@@ -30,6 +29,5 @@ export default struct SearchBar {
     .height(38)
     .padding({ left: PADDING, right: PADDING , top: 4 ,bottom:4})
 
-    .backgroundColor(this.bgColor)
   }
 }

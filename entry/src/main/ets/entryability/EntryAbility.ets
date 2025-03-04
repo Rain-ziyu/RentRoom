@@ -14,7 +14,7 @@ export default class EntryAbility extends UIAbility {
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onDestroy');
   }
 
-  onWindowStageCreate(windowStage: window.WindowStage): void {
+  async onWindowStageCreate(windowStage: window.WindowStage): Promise<void> {
     // Main window is created, set main page for this ability
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
 
@@ -25,6 +25,18 @@ export default class EntryAbility extends UIAbility {
       }
       hilog.info(DOMAIN, 'testTag', 'Succeeded in loading the content.');
     });
+    //   1.设置全屏
+    //   应用窗口对象
+    const windowClass = await windowStage.getMainWindow()
+    windowClass.setWindowLayoutFullScreen(true)
+    //   获取状态栏高度
+   const avoidArea =  windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)
+    const  topHeight = avoidArea.topRect.height
+    AppStorage.setOrCreate('topHeight',px2vp(topHeight))
+  //   设置状态栏的颜色
+    windowClass.setWindowSystemBarProperties({
+      statusBarContentColor:'#ffffff'
+    })
   }
 
   onWindowStageDestroy(): void {
