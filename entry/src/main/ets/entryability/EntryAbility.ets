@@ -37,6 +37,10 @@ export default class EntryAbility extends UIAbility {
     windowClass.setWindowSystemBarProperties({
       statusBarContentColor:'#ffffff'
     })
+    // 4. 获取屏幕宽高并存储起来
+    const properties = windowClass.getWindowProperties()
+    AppStorage.setOrCreate('windowHeight', properties.windowRect.height);
+    AppStorage.setOrCreate('windowWidth', properties.windowRect.width);
   }
 
   onWindowStageDestroy(): void {

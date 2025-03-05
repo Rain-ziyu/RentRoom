@@ -15,10 +15,11 @@ export default struct TileList {
            Text(tile.title).fontSize(12).fontColor($r('app.color.black'))
            Text(tile.sub_title).fontSize(10).fontColor($r('app.color.gray'))
          }.width('100%')
-       }.width(140)
+       }.width(150)
      },(tile:ITileItem)=>tile.id+'')
     }
     .width('100%')
     .margin({top :12})
+    .justifyContent(FlexAlign.SpaceBetween)
   }
 }
