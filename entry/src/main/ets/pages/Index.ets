@@ -7,7 +7,7 @@ import Discover from './Discover'
 @Component
 struct Index {
   @State currentTabBarIndex: number = 0;
-
+@StorageProp('botHeight') bottomHeight :number = 0
   @Builder
   tabBarBuilder(image: Resource, activeImage: Resource, text: string, index: number) {
     Column() {
@@ -37,7 +37,7 @@ struct Index {
       TabContent() {
         My()
       }.tabBar(this.tabBarBuilder( $r('app.media.tabbar_my'), $r('app.media.tabbar_my_active'),'我的',4))
-    }.barHeight(50)
+    }.barHeight(50+this.bottomHeight)
     .scrollable(false)
     .onChange((index:number)=>{
       this.currentTabBarIndex = index

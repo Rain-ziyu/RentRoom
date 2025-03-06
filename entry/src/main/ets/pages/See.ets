@@ -1,8 +1,33 @@
+import { PADDING } from "../constants/size"
+import rvp from "../util/responsive"
+import NavBar from "../views/See/NavBar"
+import { window } from "@kit.ArkUI"
+
 @Component
 export default struct See {
+  windowClass? :window.Window
+  // 设置 window 状态栏颜色
+  setWindowStatusColor = async () => {
+    this.windowClass = await window.getLastWindow(getContext())
+    this.windowClass!.setWindowSystemBarProperties({
+      statusBarContentColor:'#000000',
+      navigationBarContentColor:'#000000'
+    })
+  }
+  aboutToAppear(): void {
+    this.setWindowStatusColor()
+  }
   build() {
-    Row() {
-      Text('See')
-    }
+    Column(){
+      NavBar()
+    }.width('100%').height('100%')
+    .linearGradient({
+      direction: GradientDirection.Bottom,
+      colors: [
+        ['#DEFBE5', 0],
+        ['#ffffff', 0.3],
+        ['#ffffff', 1],
+      ],
+    })
   }
 }
