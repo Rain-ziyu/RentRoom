@@ -3,6 +3,8 @@ import My from './My'
 import See from './See'
 import Service from './Service'
 import Discover from './Discover'
+import { window } from '@kit.ArkUI'
+
 @Entry
 @Component
 struct Index {
@@ -15,7 +17,15 @@ struct Index {
       Text(text).fontSize(10).fontColor('#A0A0A0')
     }
   }
+  windowClass? :window.Window
+  // 设置 window 状态栏颜色
+  setWindowStatusColor = async (color:string) => {
+    this.windowClass = await window.getLastWindow(getContext())
+    this.windowClass!.setWindowSystemBarProperties({
+      statusBarContentColor:color,
 
+    })
+  }
   build() {
     Tabs({ barPosition: BarPosition.End }) {
       TabContent() {
@@ -41,6 +51,11 @@ struct Index {
     .scrollable(false)
     .onChange((index:number)=>{
       this.currentTabBarIndex = index
+      if (index===1){
+        this.setWindowStatusColor('#000000')
+      }else {
+        this.setWindowStatusColor('#FFFFFF')
+      }
     })
   }
 }
