@@ -25,7 +25,7 @@ export default struct FindRoom {
           Image($r('app.media.bus')).width(34).height(34).objectFit(ImageFit.Fill)
           Column({ space: 5 }) {
             Text('通勤找房').fontSize(16)
-            Text('按公司通勤时长找房').fontSize(12).fontColor($r('app.color.gray'))
+            Text('按公司通勤时长找房').fontSize(11).fontColor($r('app.color.gray'))
           }.alignItems(HorizontalAlign.Start)
         }
 
@@ -33,7 +33,7 @@ export default struct FindRoom {
           Image($r('app.media.map')).width(34).height(34).objectFit(ImageFit.Fill)
           Column({ space: 5 }) {
             Text('地图找房').fontSize(16)
-            Text('在你想住的地方找房').fontSize(12).fontColor($r('app.color.gray'))
+            Text('在你想住的地方找房').fontSize(11).fontColor($r('app.color.gray'))
           }.alignItems(HorizontalAlign.Start)
         }
       }
