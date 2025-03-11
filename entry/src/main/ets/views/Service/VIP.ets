@@ -1,12 +1,28 @@
 import { PADDING } from "../../constants/size"
 import rvp from "../../util/responsive"
 import { window } from "@kit.ArkUI"
+import { IVipServiceItem, IVipServiceList } from "../../models/ServiceData"
+import { DEFAULT } from "@ohos/hypium"
 
 
 @Component
 export default struct VIP {
   @StorageProp('topHeight') topHeight: number = 0
-
+@Prop vipServiceList: IVipServiceList = []
+  getUnit = (name:string):string=>{
+    switch (name){
+      case '余额':
+        return '元'
+      case '优惠券':
+        return '张'
+      case '会员特权':
+        return '项'
+      case '会员福利':
+        return '个'
+      default:
+        return ''
+    }
+  }
   build() {
 
     Stack() {
@@ -21,34 +37,15 @@ export default struct VIP {
           Image($r('app.media.vip')).width(42).height(19).objectFit(ImageFit.Fill)
         }
         Row({space:32}){
-          Column({space:6}){
-            Text('余额').fontColor($r('app.color.white')).fontSize(12)
-            Text(){
-              Span('0').fontSize(16).fontWeight(700)
-              Span('元').fontSize(10)
-            }.fontColor($r('app.color.white'))
-          }
-          Column({space:6}){
-            Text('优惠券').fontColor($r('app.color.white')).fontSize(12)
-            Text(){
-              Span('4').fontSize(16).fontWeight(700)
-              Span('张').fontSize(10)
-            }.fontColor($r('app.color.white'))
-          }
-          Column({space:6}){
-            Text('会员特权').fontColor($r('app.color.white')).fontSize(12)
-            Text(){
-              Span('7').fontSize(16).fontWeight(700)
-              Span('项').fontSize(10)
-            }.fontColor($r('app.color.white'))
-          }
-          Column({space:6}){
-            Text('会员福利').fontColor($r('app.color.white')).fontSize(12)
-            Text(){
-              Span('21').fontSize(16).fontWeight(700)
-              Span('个').fontSize(10)
-            }.fontColor($r('app.color.white'))
-          }
+          ForEach(this.vipServiceList,(vip:IVipServiceItem)=>{
+            Column({space:6}){
+              Text(vip.name).fontColor($r('app.color.white')).fontSize(12)
+              Text(){
+                Span(vip.content+'').fontSize(16).fontWeight(700)
+                Span(this.getUnit(vip.name)).fontSize(10)
+              }.fontColor($r('app.color.white'))
+            }
+          })
         }
       }.height('100%')
       .justifyContent(FlexAlign.Center)
