@@ -8,6 +8,7 @@ import Bg from '../views/Service/Bg'
 import DomesticService from '../views/Service/DomesticService'
 import NavBar from '../views/Service/NavBar'
 import ServiceCalendar from '../views/Service/ServiceCalendar'
+import ServiceClean from '../views/Service/ServiceClean'
 import VIP from '../views/Service/VIP'
 
 @Component
@@ -38,6 +39,7 @@ export default struct Service {
         VIP({vipServiceList:this.vipServiceList})
         DomesticService({homeServiceList:this.homeServiceList})
         ServiceCalendar({serviceActivity:this.serviceActivity})
+        ServiceClean({newcomerZone:this.newcomerZone,cleaningServiceInfo:this.cleaningServiceInfo})
       }.width('100%').padding({ left: PADDING, right: PADDING })
     }.width('100%').alignContent(Alignment.TopStart).backgroundColor($r('app.color.bg_gray_second'))
   }

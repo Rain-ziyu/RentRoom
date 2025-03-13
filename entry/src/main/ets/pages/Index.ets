@@ -27,7 +27,7 @@ struct Index {
     })
   }
   build() {
-    Tabs({ barPosition: BarPosition.End }) {
+    Tabs({ barPosition: BarPosition.End ,index:this.currentTabBarIndex}) {
       TabContent() {
         Home()
       }.tabBar(this.tabBarBuilder( $r('app.media.tabbar_home'), $r('app.media.tabbar_home_active'),'首页',0))
@@ -48,6 +48,7 @@ struct Index {
         My()
       }.tabBar(this.tabBarBuilder( $r('app.media.tabbar_my'), $r('app.media.tabbar_my_active'),'我的',4))
     }.barHeight(50+this.bottomHeight)
+
     .scrollable(false)
     .onChange((index:number)=>{
       this.currentTabBarIndex = index

@@ -1,5 +1,6 @@
 import { PADDING, PADDING_S } from '../../constants/size'
 import type { BannerListDataSource, IBannerItem, IBannerList } from '../../models/HomeData'
+import { router } from '@kit.ArkUI'
 
 @Component
 export default struct SearchBar {
@@ -22,7 +23,11 @@ export default struct SearchBar {
 
           Image($r('app.media.position')).width(18).height(18)
         }.width('100%').padding({ left: PADDING, right: PADDING })
-      }.width(244)
+      }.width(244).onClick(()=>{
+        router.pushUrl({
+          url:'pages/RentRoom/RentRoomList'
+        })
+      })
 
       Image($r('app.media.message')).width(24).height(24).fillColor(this.fontColor)
     }.width('100%')

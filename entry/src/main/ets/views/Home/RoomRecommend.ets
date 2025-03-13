@@ -12,7 +12,7 @@ import {
   ITileList,
   RoomRecommendDataSource
 } from '../../models/HomeData'
-import { RowModifier } from '@kit.ArkUI'
+import { router, RowModifier } from '@kit.ArkUI'
 
 @Component
 export default struct RoomRecommend {
@@ -41,7 +41,11 @@ export default struct RoomRecommend {
         Row({ space: 6 }) {
           Text('更多推荐').fontSize(10).fontColor($r('app.color.gray_second'))
           Image($r('app.media.arrow_right')).width(4).height(8)
-        }
+        }.onClick(()=>{
+          router.pushUrl({
+            url:'pages/RentRoom/RentRoomList'
+          })
+        })
 
       }.width('100%')
       .justifyContent(FlexAlign.SpaceBetween)

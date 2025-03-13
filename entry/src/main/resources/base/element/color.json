@@ -39,6 +39,10 @@
     {
       "name": "gray_text",
       "value": "#A0A0A0"
+    },
+    {
+      "name": "red_text",
+      "value": "#FFFA0404"
     }
   ]
 }
