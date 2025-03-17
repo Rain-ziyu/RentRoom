@@ -1,4 +1,7 @@
 import NavBar from '../../components/NavBar/Index'
+import RoomList from '../../views/RentRoomList/RoomList';
+import SearchFilter from '../../views/RentRoomList/SearchFilter';
+
 @Entry
 @Component
 struct RentRoomList {
@@ -7,6 +10,8 @@ struct RentRoomList {
   build() {
     Column(){
       NavBar({title:'服务列表'})
+      SearchFilter()
+      RoomList()
     }
     .height('100%')
     .width('100%')
