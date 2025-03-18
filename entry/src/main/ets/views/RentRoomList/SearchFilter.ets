@@ -10,6 +10,7 @@ export default struct SearchFilter {
   showSearchArea = (text:string) => {
     if(text === this.currentSearchText){
       this.isSearchArea = !this.isSearchArea
+      this.currentSearchText = ''
       return
     }
     this.isSearchArea = true
@@ -37,7 +38,7 @@ export default struct SearchFilter {
         ForEach(this.searchTextList, (text: string) => {
           Row({ space: 6 }) {
             Text(text).fontSize(14).fontColor('#333333')
-            Image($r('app.media.arrow_down_3')).width(6).height(3)
+            Image(this.currentSearchText===text?$r('app.media.arrow_down_3_active'):$r('app.media.arrow_down_3')).width(this.currentSearchText===text?15:6).height(this.currentSearchText===text?10:3)
           }.onClick(()=>this.showSearchArea(text))
         }, (text: string) => text)
 
