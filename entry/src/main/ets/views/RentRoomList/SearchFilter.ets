@@ -17,6 +17,7 @@ export default struct SearchFilter {
     this.currentSearchText = text
   }
   hideSearchArea = () => {
+    this.currentSearchText = ''
     this.isSearchArea = false
   }
 @Builder positionBuilder(){
