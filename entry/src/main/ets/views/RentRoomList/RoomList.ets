@@ -166,11 +166,11 @@ export default struct RoomList {
       this.loadMore()
     })
     .width('100%')
-    .height(this.windowsHeight - this.topHeight - 88)
+    .height('100%')
     .rowsGap(8)
     .columnsTemplate('1fr 1fr')
     .columnsGap(8)
-    .padding({ left: PADDING, right: PADDING })
+    .padding({ top:88,left: PADDING, right: PADDING })
     .backgroundColor($r('app.color.bg_gray'))
   }
 }
