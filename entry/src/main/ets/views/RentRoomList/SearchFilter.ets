@@ -1,5 +1,5 @@
 import { getCityListApi, getDistrictListApi, getProvinceListApi } from '../../api/rentRoomList'
-import { PADDING } from '../../constants/size'
+import { BORDER_RADIUS_S, PADDING } from '../../constants/size'
 import type { BannerListDataSource, IBannerItem, IBannerList, INavItem, INavList } from '../../models/HomeData'
 import {
   ICityItem,
@@ -86,8 +86,27 @@ export default struct SearchFilter {
 
       }.width(120).height('100%').backgroundColor('#e6e6e6').scrollBar(BarState.Off)
     }.height(240).width('100%')
-  }
+    Row({ space: 22 }) {
+      Button('重置')
+        .buttonStyles(95, '#F0F0F0', $r('app.color.gray_second')).onClick(this.resetLocation)
+      Button('查看房源')
+        .buttonStyles(211, '#67C0A8', $r('app.color.white'))
+    }.height(58).width('100%').backgroundColor($r('app.color.white')).justifyContent(FlexAlign.Center)
 
+    Row() {
+    }.width('100%').layoutWeight(1).backgroundColor('rgba(0, 0, 0, 0.7)').onClick(this.hidden)
+
+  }
+  // 重置地区
+  resetLocation = () => {
+    this.currentProvinceCode = this.provinceList[0].code;
+    this.currentCityCode = '';
+    this.currentDistrictCode = '';
+    this.getCityList(this.currentProvinceCode )
+  }
+  hidden = () => {
+    this.currentSearchText = '';
+  }
   @Builder
   paymentBuilder() {
     Text('支付方式')
@@ -171,4 +190,14 @@ export default struct SearchFilter {
     this.districtList = await getDistrictListApi(cityCode)
     this.currentDistrictCode = this.districtList[0].code
   }
+}
+@Extend(Button)
+function buttonStyles(width: number, bgColor: string | Resource, fontColor: string | Resource) {
+  .type(ButtonType.Normal)
+  .width(width)
+  .height(26)
+  .borderRadius(BORDER_RADIUS_S)
+  .fontSize(12)
+  .backgroundColor(bgColor)
+  .fontColor(fontColor)
 }
