@@ -118,3 +118,20 @@ export class RentRoomListDataSource implements IDataSource {
     })
   }
 }
+
+export interface  IProvinceItem{
+  name:string
+  code:string
+}
+export type IProvinceList = IProvinceItem[]
+
+
+export interface  ICityItem extends IProvinceItem{
+  provinceCode:string
+}
+export type ICityList = ICityItem[]
+
+export interface  IDistrictItem extends ICityItem{
+  cityCode:string
+}
+export type IDistrictList = IDistrictItem[]
