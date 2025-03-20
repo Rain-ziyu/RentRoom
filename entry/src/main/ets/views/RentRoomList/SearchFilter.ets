@@ -18,6 +18,9 @@ export default struct SearchFilter {
 
   handleSearchTextChange(changedPropertyName: string) {
     if (this.currentSearchText === '位置') {
+      this.currentProvinceCode = this.preProvinceCode
+      this.currentCityCode = this.preCityCode
+      this.currentDistrictCode = this.preDistrictCode
       this.getProvinceList()
     }
   }
@@ -39,7 +42,10 @@ export default struct SearchFilter {
   @State currentProvinceCode: string = ''
   @State currentCityCode: string = ''
   @State currentDistrictCode: string = ''
-
+  @State currentDistrictName: string = ''
+  @State preProvinceCode: string = ''
+  @State preCityCode: string = ''
+  @State preDistrictCode: string = ''
   @Builder
   positionBuilder() {
     Row() {
@@ -52,7 +58,9 @@ export default struct SearchFilter {
 
           }.height(30).width('100%').align(Alignment.Start).padding({ left: PADDING, right: PADDING })
           .onClick(()=>{
-            this.getCityList(province.code)
+            this.currentCityCode = ''
+            this.currentDistrictCode = ''
+              this.getCityList(province.code)
             this.currentProvinceCode = province.code
           })
         }, (province: IProvinceItem) => province.code)
@@ -66,6 +74,7 @@ export default struct SearchFilter {
               .fontColor(this.currentCityCode === city.code ? $r('app.color.primary') : $r('app.color.black'))
           }.height(30).width('100%').align(Alignment.Start).padding({ left: PADDING, right: PADDING })
           .onClick(()=>{
+            this.currentDistrictCode = ''
             this.getDistrictList(city.code)
             this.currentCityCode = city.code
           })
@@ -81,6 +90,7 @@ export default struct SearchFilter {
                    .onClick(()=>{
 
             this.currentDistrictCode = district.code
+
           })
         }, (district: IDistrictItem) => district.code)
 
@@ -91,10 +101,15 @@ export default struct SearchFilter {
         .buttonStyles(95, '#F0F0F0', $r('app.color.gray_second')).onClick(this.resetLocation)
       Button('查看房源')
         .buttonStyles(211, '#67C0A8', $r('app.color.white'))
+        .onClick(()=>{
+          this.currentDistrictName = this.districtList.find(district=>this.currentDistrictCode===district.code)!.name
+          this.hideSearchArea()
+          this.preProvinceCode = this.currentProvinceCode
+          this.preCityCode = this.currentCityCode
+          this.preDistrictCode = this.currentDistrictCode
+        })
     }.height(58).width('100%').backgroundColor($r('app.color.white')).justifyContent(FlexAlign.Center)
 
-    Row() {
-    }.width('100%').layoutWeight(1).backgroundColor('rgba(0, 0, 0, 0.7)').onClick(this.hidden)
 
   }
   // 重置地区
@@ -102,11 +117,10 @@ export default struct SearchFilter {
     this.currentProvinceCode = this.provinceList[0].code;
     this.currentCityCode = '';
     this.currentDistrictCode = '';
+    // this.currentDistrictName = ''
     this.getCityList(this.currentProvinceCode )
   }
-  hidden = () => {
-    this.currentSearchText = '';
-  }
+
   @Builder
   paymentBuilder() {
     Text('支付方式')
@@ -121,14 +135,28 @@ export default struct SearchFilter {
   orderBuilder() {
     Text('排序')
   }
-
+getSearchText = (text:string)=>{
+    if(text==='位置'){
+      return this.currentDistrictName ||text
+    }else {
+      return text
+    }
+}
+  getSearchTextColor = (text:string)=>{
+    if(text==='位置'){
+      return this.currentDistrictName?$r('app.color.primary'):'#333333'
+    }else {
+      return text
+    }
+  }
   build() {
     Column() {
-      // 四个搜索文件
+      // 四个搜索
       Row() {
         ForEach(this.searchTextList, (text: string) => {
           Row({ space: 6 }) {
-            Text(text).fontSize(14).fontColor('#333333')
+            Text(this.getSearchText(text)).fontSize(14).fontColor(this.getSearchTextColor(text))
+              .constraintSize({maxWidth:56}).maxLines(1).textOverflow({overflow:TextOverflow.Ellipsis})
             Image(this.currentSearchText === text ? $r('app.media.arrow_down_3_active') : $r('app.media.arrow_down_3'))
               .width(this.currentSearchText === text ? 15 : 6)
               .height(this.currentSearchText === text ? 10 : 3)
@@ -171,16 +199,16 @@ export default struct SearchFilter {
 
   getProvinceList = async () => {
     this.provinceList = await getProvinceListApi()
-    this.currentProvinceCode = this.provinceList[0].code
-    this.getCityList(this.provinceList[0].code)
+    this.currentProvinceCode = this.currentProvinceCode||this.provinceList[0].code
+    this.getCityList( this.currentProvinceCode)
   }
   @State cityList: ICityList = []
   //   获取城市数据
 
   getCityList = async (provinceCode: string) => {
     this.cityList = await getCityListApi(provinceCode)
-    this.currentCityCode = this.cityList[0].code
-    this.getDistrictList(this.cityList[0].code)
+    this.currentCityCode =  this.currentCityCode||this.cityList[0].code
+    this.getDistrictList(this.currentCityCode)
   }
   @State districtList: IDistrictList = []
   //   获取区数据
@@ -188,7 +216,7 @@ export default struct SearchFilter {
   getDistrictList = async (cityCode: string) => {
 
     this.districtList = await getDistrictListApi(cityCode)
-    this.currentDistrictCode = this.districtList[0].code
+    this.currentDistrictCode =this.currentDistrictCode|| this.districtList[0].code
   }
 }
 @Extend(Button)
