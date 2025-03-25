@@ -11,6 +11,7 @@ import { searchRoomListApi } from '../../api/rentRoomList'
 import { IGetRentRoomListParams, IRentRoomItem, IRentRoomList, RentRoomListDataSource } from '../../models/RentRoomList'
 import { Event } from '@kit.ArkTS'
 import { faceDetector } from '@kit.CoreVisionKit'
+import globalEmitter from '../../util/emitter'
 
 @Component
 export default struct RoomList {
@@ -47,6 +48,15 @@ export default struct RoomList {
 
   aboutToAppear(): void {
     this.searchRoomList()
+    // 将传递过来的搜索条件添加到当前组件的搜索条件中来
+    globalEmitter.on('search', (searchParam: Partial<IGetRentRoomListParams>) => {
+      const keys = Object.keys(searchParam)
+      keys.forEach(key => {
+        Reflect.set(this.searchOptions, key, Reflect.get(searchParam, key))
+      })
+      this.searchOptions.page = 1
+      this.searchRoomList()
+    })
   }
 
   @Builder
@@ -170,7 +180,7 @@ export default struct RoomList {
     .rowsGap(8)
     .columnsTemplate('1fr 1fr')
     .columnsGap(8)
-    .padding({ top:88,left: PADDING, right: PADDING })
+    .padding({ top: 88, left: PADDING, right: PADDING })
     .backgroundColor($r('app.color.bg_gray'))
   }
 }

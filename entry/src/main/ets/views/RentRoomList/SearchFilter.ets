@@ -9,6 +9,7 @@ import {
   IProvinceItem,
   IProvinceList
 } from '../../models/RentRoomList'
+import globalEmitter from '../../util/emitter'
 
 @Component
 export default struct SearchFilter {
@@ -107,6 +108,12 @@ export default struct SearchFilter {
           this.preProvinceCode = this.currentProvinceCode
           this.preCityCode = this.currentCityCode
           this.preDistrictCode = this.currentDistrictCode
+        //   触发搜索房源列表
+          globalEmitter.emit('search',{
+            provinceCode : this.currentProvinceCode,
+            cityCode:this.currentCityCode,
+            districtCode:this.currentDistrictCode
+          })
         })
     }.height(58).width('100%').backgroundColor($r('app.color.white')).justifyContent(FlexAlign.Center)
 
