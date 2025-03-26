@@ -6,8 +6,12 @@ import {
   ICityList,
   IDistrictItem,
   IDistrictList,
+  IGetRentRoomListParams,
+  IPaymentType,
   IProvinceItem,
-  IProvinceList
+  IProvinceList,
+  RentPrice,
+  RentPriceList
 } from '../../models/RentRoomList'
 import globalEmitter from '../../util/emitter'
 
@@ -23,6 +27,8 @@ export default struct SearchFilter {
       this.currentCityCode = this.preCityCode
       this.currentDistrictCode = this.preDistrictCode
       this.getProvinceList()
+    }else  if(this.currentSearchText === '支付方式'){
+      this.currentPaymentWay = this.prePaymentWay
     }
   }
 
@@ -47,6 +53,7 @@ export default struct SearchFilter {
   @State preProvinceCode: string = ''
   @State preCityCode: string = ''
   @State preDistrictCode: string = ''
+
   @Builder
   positionBuilder() {
     Row() {
@@ -57,11 +64,15 @@ export default struct SearchFilter {
               .fontSize(12)
               .fontColor(this.currentProvinceCode === province.code ? $r('app.color.primary') : $r('app.color.black'))
 
-          }.height(30).width('100%').align(Alignment.Start).padding({ left: PADDING, right: PADDING })
-          .onClick(()=>{
+          }
+          .height(30)
+          .width('100%')
+          .align(Alignment.Start)
+          .padding({ left: PADDING, right: PADDING })
+          .onClick(() => {
             this.currentCityCode = ''
             this.currentDistrictCode = ''
-              this.getCityList(province.code)
+            this.getCityList(province.code)
             this.currentProvinceCode = province.code
           })
         }, (province: IProvinceItem) => province.code)
@@ -73,8 +84,12 @@ export default struct SearchFilter {
             Text(city.name)
               .fontSize(12)
               .fontColor(this.currentCityCode === city.code ? $r('app.color.primary') : $r('app.color.black'))
-          }.height(30).width('100%').align(Alignment.Start).padding({ left: PADDING, right: PADDING })
-          .onClick(()=>{
+          }
+          .height(30)
+          .width('100%')
+          .align(Alignment.Start)
+          .padding({ left: PADDING, right: PADDING })
+          .onClick(() => {
             this.currentDistrictCode = ''
             this.getDistrictList(city.code)
             this.currentCityCode = city.code
@@ -87,8 +102,12 @@ export default struct SearchFilter {
           ListItem() {
             Text(district.name).fontSize(12)
               .fontColor(this.currentDistrictCode === district.code ? $r('app.color.primary') : $r('app.color.black'))
-          }.height(30).width('100%').align(Alignment.Start).padding({ left: PADDING, right: PADDING })
-                   .onClick(()=>{
+          }
+          .height(30)
+          .width('100%')
+          .align(Alignment.Start)
+          .padding({ left: PADDING, right: PADDING })
+          .onClick(() => {
 
             this.currentDistrictCode = district.code
 
@@ -97,73 +116,166 @@ export default struct SearchFilter {
 
       }.width(120).height('100%').backgroundColor('#e6e6e6').scrollBar(BarState.Off)
     }.height(240).width('100%')
+
     Row({ space: 22 }) {
       Button('重置')
         .buttonStyles(95, '#F0F0F0', $r('app.color.gray_second')).onClick(this.resetLocation)
       Button('查看房源')
         .buttonStyles(211, '#67C0A8', $r('app.color.white'))
-        .onClick(()=>{
-          this.currentDistrictName = this.districtList.find(district=>this.currentDistrictCode===district.code)!.name
+        .onClick(() => {
+          this.currentDistrictName =
+            this.districtList.find(district => this.currentDistrictCode === district.code)!.name
           this.hideSearchArea()
           this.preProvinceCode = this.currentProvinceCode
           this.preCityCode = this.currentCityCode
           this.preDistrictCode = this.currentDistrictCode
-        //   触发搜索房源列表
-          globalEmitter.emit('search',{
-            provinceCode : this.currentProvinceCode,
-            cityCode:this.currentCityCode,
-            districtCode:this.currentDistrictCode
+          //   触发搜索房源列表
+          globalEmitter.emit('search', {
+            provinceCode: this.currentProvinceCode,
+            cityCode: this.currentCityCode,
+            districtCode: this.currentDistrictCode
           })
         })
     }.height(58).width('100%').backgroundColor($r('app.color.white')).justifyContent(FlexAlign.Center)
 
-
   }
+
   // 重置地区
   resetLocation = () => {
     this.currentProvinceCode = this.provinceList[0].code;
     this.currentCityCode = '';
     this.currentDistrictCode = '';
     // this.currentDistrictName = ''
-    this.getCityList(this.currentProvinceCode )
+    this.getCityList(this.currentProvinceCode)
   }
-
+  @State prePaymentWay: string = ''
+  // 重置支付方式
+  resetPaymentWay = () => {
+    this.currentPaymentWay = ''
+  }
+  submitPaymentWay = () => {
+    this.prePaymentWay = this.currentPaymentWay
+    this.hideSearchArea()
+    globalEmitter.emit('search', { paymentType: this.prePaymentWay })
+  }
+  @State paymentWayList: string[] = ['月付', '季付', '半年付', '年付']
+  @State currentPaymentWay: string = ''
+@State rentPriceList:RentPriceList = [
+  {
+    id:1,
+    minRent:'0',
+    maxRent:'0',
+    text:'不限'
+  },
+  {
+    id:1,
+    minRent:'100',
+    maxRent:'200',
+    text:'100以上'
+  }
+]
   @Builder
   paymentBuilder() {
-    Text('支付方式')
-  }
+    Row() {
+      ForEach(this.paymentWayList, (paymentWay: string) => {
+        Text(paymentWay)
+          .width(70)
+          .height(26)
+          .borderRadius(BORDER_RADIUS_S)
+          .backgroundColor(this.currentPaymentWay === paymentWay ? '#67C0AB' : $r('app.color.bg_gray'))
+          .fontSize(12)
+          .fontColor($r('app.color.gray_second'))
+          .textAlign(TextAlign.Center)
+          .onClick(() => {
+            this.currentPaymentWay = paymentWay
+          })
+      }, (paymentWay: string) => paymentWay)
 
+    }.width('100%')
+    .padding(PADDING).justifyContent(FlexAlign.SpaceBetween)
+
+    Row({ space: 22 }) {
+      Button('重置')
+        .buttonStyles(95, '#F0F0F0', $r('app.color.gray_second')).onClick(this.resetPaymentWay)
+      Button('查看房源')
+        .buttonStyles(211, '#67C0A8', $r('app.color.white'))
+        .onClick(() => {
+         this.submitPaymentWay()
+        })
+    }.height(58).width('100%').backgroundColor($r('app.color.white')).justifyContent(FlexAlign.Center)
+
+  }
+@State currentRentPriceId :number= 0
   @Builder
   rentPriceBuilder() {
-    Text('租金')
+    Grid() {
+      ForEach(this.rentPriceList, (rentPrice: RentPrice) => {
+       GridItem() {
+         Text(rentPrice.text)
+           .width(94)
+           .height(26)
+           .borderRadius(BORDER_RADIUS_S)
+           .backgroundColor(this.currentRentPriceId===rentPrice.id?$r('app.color.primary'):$r('app.color.bg_gray'))
+           .fontSize(12)
+           .fontColor($r('app.color.gray_second'))
+           .textAlign(TextAlign.Center)
+           .onClick(() => {
+              this.currentRentPriceId = rentPrice.id
+           })
+       }
+      }, (rentPrice: RentPrice) => rentPrice.id+'')
+
+    }.width('100%')
+    .height(136)
+    .padding(PADDING).columnsTemplate('1fr 1fr 1fr')
+.rowsGap(8)
+    Row({ space: 22 }) {
+      Button('重置')
+        .buttonStyles(95, '#F0F0F0', $r('app.color.gray_second')).onClick(this.resetPaymentWay)
+      Button('查看房源')
+        .buttonStyles(211, '#67C0A8', $r('app.color.white'))
+        .onClick(() => {
+          this.submitPaymentWay()
+        })
+    }.height(58).width('100%').backgroundColor($r('app.color.white')).justifyContent(FlexAlign.Center)
+
   }
 
   @Builder
   orderBuilder() {
     Text('排序')
   }
-getSearchText = (text:string)=>{
-    if(text==='位置'){
-      return this.currentDistrictName ||text
-    }else {
-      return text
+
+  getSearchText = (text: string) => {
+    if (text === '位置') {
+      return this.currentDistrictName || text
+    } else if (text === '支付方式') {
+      return this.prePaymentWay || text
     }
-}
-  getSearchTextColor = (text:string)=>{
-    if(text==='位置'){
-      return this.currentDistrictName?$r('app.color.primary'):'#333333'
-    }else {
+    return text
+  }
+  getSearchTextColor = (text: string) => {
+    if (text === '位置') {
+      return this.currentDistrictName ? $r('app.color.primary') : '#333333'
+    } else if (text === '支付方式') {
+      return this.prePaymentWay ? $r('app.color.primary') : '#333333'
+    } else {
       return text
     }
   }
+
   build() {
     Column() {
       // 四个搜索
       Row() {
         ForEach(this.searchTextList, (text: string) => {
           Row({ space: 6 }) {
-            Text(this.getSearchText(text)).fontSize(14).fontColor(this.getSearchTextColor(text))
-              .constraintSize({maxWidth:56}).maxLines(1).textOverflow({overflow:TextOverflow.Ellipsis})
+            Text(this.getSearchText(text))
+              .fontSize(14)
+              .fontColor(this.getSearchTextColor(text))
+              .constraintSize({ maxWidth: 56 })
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
             Image(this.currentSearchText === text ? $r('app.media.arrow_down_3_active') : $r('app.media.arrow_down_3'))
               .width(this.currentSearchText === text ? 15 : 6)
               .height(this.currentSearchText === text ? 10 : 3)
@@ -206,15 +318,15 @@ getSearchText = (text:string)=>{
 
   getProvinceList = async () => {
     this.provinceList = await getProvinceListApi()
-    this.currentProvinceCode = this.currentProvinceCode||this.provinceList[0].code
-    this.getCityList( this.currentProvinceCode)
+    this.currentProvinceCode = this.currentProvinceCode || this.provinceList[0].code
+    this.getCityList(this.currentProvinceCode)
   }
   @State cityList: ICityList = []
   //   获取城市数据
 
   getCityList = async (provinceCode: string) => {
     this.cityList = await getCityListApi(provinceCode)
-    this.currentCityCode =  this.currentCityCode||this.cityList[0].code
+    this.currentCityCode = this.currentCityCode || this.cityList[0].code
     this.getDistrictList(this.currentCityCode)
   }
   @State districtList: IDistrictList = []
@@ -223,9 +335,10 @@ getSearchText = (text:string)=>{
   getDistrictList = async (cityCode: string) => {
 
     this.districtList = await getDistrictListApi(cityCode)
-    this.currentDistrictCode =this.currentDistrictCode|| this.districtList[0].code
+    this.currentDistrictCode = this.currentDistrictCode || this.districtList[0].code
   }
 }
+
 @Extend(Button)
 function buttonStyles(width: number, bgColor: string | Resource, fontColor: string | Resource) {
   .type(ButtonType.Normal)

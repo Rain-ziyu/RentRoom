@@ -15,11 +15,17 @@ export interface IGetRentRoomListParams {
   "districtId"?: string
   "minRent"?: string
   "maxRent"?: string
-  "paymentType"?: IPaymentType
+  "paymentType"?: string
   "orderBy"?: IOrderBy,
   "orderType"?: IOrderType
 }
-
+export interface  RentPrice {
+  id:number
+  minRent:string
+  maxRent:string
+  text:string
+}
+export type  RentPriceList = RentPrice[]
 export interface IGetRentRoomListResponse {
   records: IRentRoomList
   total: number
