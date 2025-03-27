@@ -12,6 +12,7 @@ import { IGetRentRoomListParams, IRentRoomItem, IRentRoomList, RentRoomListDataS
 import { Event } from '@kit.ArkTS'
 import { faceDetector } from '@kit.CoreVisionKit'
 import globalEmitter from '../../util/emitter'
+import { router } from '@kit.ArkUI'
 
 @Component
 export default struct RoomList {
@@ -165,6 +166,14 @@ export default struct RoomList {
           }.width('100%').height('100%').borderRadius(BORDER_RADIUS).backgroundColor($r('app.color.white'))
 
         }.width(160).height(room.activity ? 320 : 210)
+      .onClick(()=>{
+        router.pushUrl({
+          url:'pages/RentRoom/RentRoomDetail',
+          params:{
+            id:room.id
+          }
+        })
+      })
       }, (item: IRentRoomItem) =>
       item.id
       )

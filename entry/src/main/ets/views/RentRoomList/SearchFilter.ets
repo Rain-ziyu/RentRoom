@@ -315,35 +315,35 @@ export default struct SearchFilter {
 @State sortList :ISortList = [
   {
     id: 1,
-    icon: $r('app.media.sort'),
+    icon: $r('app.media.back'),
     text: '综合排序',
     orderBy: '',
     orderType: ''
   },
   {
     id: 2,
-    icon: $r('app.media.rent'),
+    icon: $r('app.media.back'),
     text: '价格从低到高',
     orderBy: 'price',
     orderType: 'asc'
   },
   {
     id: 3,
-    icon: $r('app.media.rent'),
+    icon: $r('app.media.back'),
     text: '价格从高到低',
     orderBy: 'price',
     orderType: 'desc'
   },
   {
     id: 4,
-    icon: $r('app.media.area'),
+    icon: $r('app.media.back'),
     text: '面积从大到小',
     orderBy: 'area',
     orderType: 'desc'
   },
   {
     id: 5,
-    icon: $r('app.media.area'),
+    icon: $r('app.media.back'),
     text: '面积从小到大',
     orderBy: 'area',
     orderType: 'asc'
