@@ -3,9 +3,9 @@ import { IRoomRecommendItem } from "./HomeData"
 
 export type IPaymentType = "月付" | "季付" | "半年付" | "年付"
 
-export type IOrderBy = "面积" | "价格"
+export type IOrderBy = "area" | "price"|""
 
-export type IOrderType = "asc" | "desc"
+export type IOrderType = "asc" | "desc"|""
 
 export interface IGetRentRoomListParams {
   "page": number
@@ -141,3 +141,15 @@ export interface  IDistrictItem extends ICityItem{
   cityCode:string
 }
 export type IDistrictList = IDistrictItem[]
+
+
+// ...
+export interface ISortItem {
+  id: number;
+  icon: Resource;
+  text: string;
+  orderBy: IOrderBy;
+  orderType: IOrderType;
+}
+
+export type ISortList = ISortItem[]
