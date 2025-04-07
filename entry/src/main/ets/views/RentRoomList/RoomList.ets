@@ -166,14 +166,14 @@ export default struct RoomList {
           }.width('100%').height('100%').borderRadius(BORDER_RADIUS).backgroundColor($r('app.color.white'))
 
         }.width(160).height(room.activity ? 320 : 210)
-      .onClick(()=>{
-        router.pushUrl({
-          url:'pages/RentRoom/RentRoomDetail',
-          params:{
-            id:room.id
-          }
+        .onClick(() => {
+          router.pushUrl({
+            url: 'pages/RentRoom/RentRoomDetail',
+            params: {
+              id: room.id
+            }
+          })
         })
-      })
       }, (item: IRentRoomItem) =>
       item.id
       )
