@@ -105,17 +105,15 @@ struct RentRoomDetail {
       .edgeEffect(EdgeEffect.None)
       .scrollBar(BarState.Off)
 
-      List({ space: 16, scroller: this.picScroller }) {
-        ListItem() {
-        }.width(0)
+      List({ scroller: this.picScroller }) {
 
         ForEach(this.roomPictureList, (pic: string) => {
           ListItem() {
             Image(pic).width(318).height('100%').objectFit(ImageFit.Fill)
-          }
-        }, (pic: string) => pic)
+          }.margin({left:16})
+        })
         ListItem() {
-        }.width(0)
+        }.width(16)
       }
       .width('100%')
       .height(208)
