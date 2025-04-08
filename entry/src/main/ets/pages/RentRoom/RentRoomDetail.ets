@@ -121,6 +121,20 @@ struct RentRoomDetail {
       .listDirection(Axis.Horizontal)
       .edgeEffect(EdgeEffect.None)
       .scrollBar(BarState.Off)
+      // 用于监听滚动事件
+      .onScrollIndex((startIndex,endIndex)=>{
+        console.log(startIndex+'')
+        let res:number = 0
+        for (let i =  0; i < startIndex+1;) {
+          res+=1
+          if (res>= this.roomNameList.length){
+            break
+          }else {
+            i+= this.roomNameList[res].total
+          }
+        }
+        this.currentRoomIndex = res-1
+      })
     }.height('100%').width('100%')
   }
 }
