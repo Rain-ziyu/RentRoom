@@ -31,10 +31,10 @@ export default class Http{
     return request.get<any,T>(url,{params})
   }
   post<T>(url:string,data?:AnyObject){
-    return request.post<any,T>(url,{data})
+    return request.post<any,T>(url,data)
   }
   put<T>(url:string,data?:AnyObject){
-    return request.put<any,T>(url,{data})
+    return request.put<any,T>(url,data)
   }
   delete<T>(url:string,params?:AnyObject){
     return request.delete<any,T>(url,{params})
