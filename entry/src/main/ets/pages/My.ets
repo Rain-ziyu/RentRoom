@@ -5,6 +5,9 @@ import Bg from '../views/My/Bg'
 import UserInfo from '../views/My/UserInfo'
 import rvp from '../util/responsive'
 import { PADDING } from '../constants/size'
+import TimePlan from '../views/My/TimePlan'
+import Order from '../views/My/Order'
+import PlanList from '../views/My/PlanList'
 
 @Component
 export default struct My {
@@ -20,9 +23,12 @@ export default struct My {
       Bg()
       Column() {
         UserInfo()
+        TimePlan()
+        Order()
+        PlanList()
       }.padding({ left: rvp(PADDING), right: rvp(PADDING), top: rvp(44) +this.topHeight })
 
-    }.width('100%')
+    }.width('100%').align(Alignment.TopStart)
   }
 
   build() {
