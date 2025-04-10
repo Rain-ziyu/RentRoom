@@ -79,7 +79,7 @@ export default struct LoginPhone {
           .stateEffect(this.isValidPhone===true&&this.isAgree===true)
           .onClick(()=>{
             router.pushUrl({
-              url:'/pages/Login/LoginCode',
+              url:'pages/Login/LoginCode',
               params:{
                 phone:this.phone
               }

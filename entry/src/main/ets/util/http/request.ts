@@ -7,6 +7,11 @@ const request = axios.create({
 // 封装请求时的统一配置
 request.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    const  token = AppStorage.get<string>('token');
+    if (token){
+      config.headers.token=token
+    }
+
     return config
   }
 )

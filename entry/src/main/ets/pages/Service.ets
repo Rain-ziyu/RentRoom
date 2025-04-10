@@ -1,6 +1,7 @@
 import { getServiceDataApi } from '../api/service'
 import ScrollContainer from '../components/ScrollContainer/Index'
 import { PADDING } from '../constants/size'
+import { IColor } from '../models/HomeData'
 import {
   ICleaningServiceInfoList,
   IHomeServiceList, INewcomerZone, IServiceActivity, IVipServiceList } from '../models/ServiceData'
@@ -27,8 +28,8 @@ export default struct Service {
   @State vipServiceList: IVipServiceList = []
 
   @Builder
-  navBuilder() {
-    NavBar()
+  navBuilder($$:IColor) {
+    NavBar({fontColor:$$.fontColor})
   }
 
   @Builder

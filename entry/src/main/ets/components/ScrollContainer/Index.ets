@@ -3,6 +3,7 @@ import { window } from "@kit.ArkUI";
 
 @Component
 export default struct  Index{
+  @Prop isDark:boolean = false
   @Builder customBuilder(){}
   @StorageProp('topHeight') topHeight : number = 0
   @BuilderParam navBuilderParam:($$:IColor)=>void =this.customBuilder
@@ -18,10 +19,17 @@ export default struct  Index{
   }
   aboutToAppear(): void {
     this.setWindowStatusColor()
+
   }
   // 设置 window 状态栏颜色
   setWindowStatusColor = async () => {
     this.windowClass = await window.getLastWindow(getContext())
+    if(this.isDark){
+      this.windowClass!.setWindowSystemBarProperties({
+        statusBarContentColor: '#000000',
+        navigationBarContentColor: '#000000'
+      })
+    }
   }
 
   // 计算颜色
@@ -30,6 +38,9 @@ export default struct  Index{
     if (this.scrollY < 10) {
       this.fontColor = 'rgba(255, 255, 255, 1)'
       this.bgColor = 'rgba(255, 255, 255, 0)'
+      if(this.isDark){
+        return
+      }
       this.windowClass!.setWindowSystemBarProperties({
         statusBarContentColor:'#ffffff',
         navigationBarContentColor:'#ffffff'
@@ -40,8 +51,12 @@ export default struct  Index{
       this.fontColor = `rgba(0, 0, 0,${colorOpacity})`
 
     }else {
+
       this.fontColor = 'rgb(0, 0, 0)'
       this.bgColor = 'rgb(255, 255, 255)'
+      if(this.isDark){
+        return
+      }
       this.windowClass!.setWindowSystemBarProperties({
         statusBarContentColor: '#000000',
         navigationBarContentColor: '#000000'

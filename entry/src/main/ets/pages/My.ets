@@ -8,10 +8,13 @@ import { PADDING } from '../constants/size'
 import TimePlan from '../views/My/TimePlan'
 import Order from '../views/My/Order'
 import PlanList from '../views/My/PlanList'
+import IUserData from '../models/UserData'
 
 @Component
 export default struct My {
   @StorageProp('topHeight') topHeight: number = 0
+  @StorageLink('token') token: string = ''
+
   @Builder
   navBuilder($$: IColor) {
     NavBar($$)
