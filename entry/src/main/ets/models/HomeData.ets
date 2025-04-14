@@ -142,6 +142,7 @@ export  interface  IRoomRecommendItem{
   "address":string
   "rentPriceUnit":string
   "rentPriceListing":string
+  "rentPriceUnitListing":string
   "rentArea":string
 }
 export type IRoomRecommendList = IRoomRecommendItem[]

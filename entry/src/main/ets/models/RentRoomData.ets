@@ -46,7 +46,7 @@ export interface IDiscountsItem {
 
 export type IDiscountsList = IDiscountsItem[]
 
-interface GeneratedTypeLiteralInterface_1 {
+export interface GeneratedTypeLiteralInterface_1 {
   "icon": string;
   "value": string;
 }

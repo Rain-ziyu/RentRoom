@@ -73,7 +73,7 @@ export default struct RoomRecommend {
               Column() {
                 Row() {
                   Text() {
-                    Span(room.rentPriceListing).fontSize(14)
+                    Span(room.rentPriceUnitListing).fontSize(14)
                     Span(room.rentPriceUnit).fontSize(12)
                   }.fontColor('#E03810')
 

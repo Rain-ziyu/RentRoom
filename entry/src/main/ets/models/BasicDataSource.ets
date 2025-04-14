@@ -1,14 +1,18 @@
 // BasicDataSource实现了IDataSource接口，用于管理listener监听，以及通知LazyForEach数据更新
-export  default class BasicDataSource implements IDataSource {
+export default class BasicDataSource<T> implements IDataSource {
   private listeners: DataChangeListener[] = [];
-  private originDataArray: string[] = [];
+  public  data: T[] = [];
 
   public totalCount(): number {
     return 0;
   }
 
-  public getData(index: number): string {
-    return this.originDataArray[index];
+  public getData(index: number): T {
+    return this.data[index];
+  }
+
+  public pushData(values: T[]): void {
+    this.data.push(...values)
   }
 
   // 该方法为框架侧调用，为LazyForEach组件向其数据源处添加listener监听
