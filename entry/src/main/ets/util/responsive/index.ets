@@ -20,5 +20,5 @@ export function xs(){
   return 10
 }
 export function xl(){
-  return 8
+  return 16
 }

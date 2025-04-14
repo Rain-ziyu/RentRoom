@@ -4,7 +4,7 @@ import rvp from "../../util/responsive";
 export default struct Drawer {
   @Link show: boolean;
   @BuilderParam render: () => void
-
+  @Require @Prop heights:number=0
   build() {
     if (this.show) {
       Stack() {
@@ -15,10 +15,18 @@ export default struct Drawer {
 
         Column() {
           this.render()
-        }.backgroundColor('#F6F6F6').width('100%').padding(rvp(15)).borderRadius({
+        }
+        .backgroundColor('#F6F6F6')
+        .width('100%')
+        .padding(rvp(15))
+        .borderRadius({
           topLeft: rvp(10),
           topRight: rvp(10)
         })
+        .transition(
+          TransitionEffect.translate({x:0,y:this.heights}).animation({duration:2000})
+            .combine(TransitionEffect.translate({x:0,y:181}).animation({duration:2000}))
+        )
       }
       .width('100%')
       .height('100%')

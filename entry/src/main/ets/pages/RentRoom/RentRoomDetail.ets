@@ -21,6 +21,7 @@ import RentInfo from '../../views/RentRoomDetail/RentInfo'
 import HouseholdItem from '../../views/RentRoomDetail/HouseholdItem'
 import SupportList from '../../views/RentRoomDetail/SupportList'
 import Book from '../../views/RentRoomDetail/Book'
+import BookInfo from '../../views/RentRoomDetail/BookInfo'
 
 @Entry
 @Component
@@ -77,7 +78,7 @@ struct RentRoomDetail {
   @State supportList: ISupportList = []
   @StorageProp('topHeight') topHeight: number = 0
   picScroller: Scroller = new Scroller()
-
+  @State show: boolean = false
   aboutToAppear(): void {
     this.getRoomDetail()
   }
@@ -210,7 +211,8 @@ struct RentRoomDetail {
           this.contentBuilder()
         }
       })
-      Book()
+      Book({show:$show})
+      BookInfo({show:$show})
     }.height('100%').alignContent(Alignment.Bottom)
   }
 }
