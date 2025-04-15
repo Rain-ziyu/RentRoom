@@ -1,11 +1,17 @@
 import Drawer from '../../components/Drawer/Index'
 import { BORDER_RADIUS, BORDER_RADIUS_S, PADDING } from '../../constants/size'
+import { IFormatDate, IFormatDateList } from '../../models/RentRoomData'
+import createDateList from '../../util/dateList'
 import rvp, { md, xl } from '../../util/responsive'
+import { faceDetector } from '@kit.CoreVisionKit'
 
 
 @Component
 export default struct BookInfo {
   @Link show: boolean
+  @State isShowDateList: boolean = false
+  @State dateList: IFormatDateList = createDateList()
+  @State currentDate: IFormatDate = this.dateList[0]
 
   build() {
     Drawer({ show: $show, heights: 181 }) {
@@ -25,25 +31,49 @@ export default struct BookInfo {
           Row({ space: rvp(18) }) {
             Text('预约日期').width(rvp(56)).fontSize(md())
             Row() {
-              Text('2024-01-16（今天）').fontSize(md()).fontColor($r('app.color.gray'))
-              Image($r('app.media.arrow_down_2')).width(rvp(10)).fillColor($r('app.color.gray'))
+              Text(this.currentDate.date + ' ' + this.currentDate.week).fontSize(md()).fontColor($r('app.color.gray'))
+             if(this.isShowDateList){
+              Image($r('app.media.arrow_down_3_active')).width(rvp(10)).fillColor($r('app.color.gray'))
+                .onClick(()=>{
+                  this.isShowDateList = false
+                })
+             }else {
+               Image($r('app.media.arrow_down_2')).width(rvp(10)).fillColor($r('app.color.gray'))
+                 .onClick(()=>{
+                   this.isShowDateList = true
+                 })
+             }
             }.layoutWeight(1).justifyContent(FlexAlign.SpaceBetween)
           }.width('100%')
 
-          Grid() {
-            GridItem() {
-              Column(){
-                Text('今天').fontSize(10).fontColor('#999')
-                Text('2024-01-16').fontSize(10).fontColor('#999')
-              }.height(32).width(73).border({width:1,color:'#E4E4E4'})
-              .borderRadius(BORDER_RADIUS_S).justifyContent(FlexAlign.Center)
+          if (this.isShowDateList) {
+            Grid() {
+              ForEach(this.dateList, (date: IFormatDate) => {
+                GridItem() {
+                  Column() {
+                    Text(date.week).fontSize(10).fontColor(this.currentDate.date === date.date ? '#24A17B' : '#999')
+                    Text(date.date).fontSize(10).fontColor(this.currentDate.date === date.date ? '#24A17B' : '#999')
+                  }
+                  .height(32)
+                  .width(73)
+                  .border({ width: 1, color: this.currentDate.date === date.date ? '#24A17B' : '#E4E4E4' })
+                  .borderRadius(BORDER_RADIUS_S)
+                  .justifyContent(FlexAlign.Center)
+                }.onClick(() => {
+                  this.currentDate = date
+                })
+              })
+
             }
-          }.width(231).columnsTemplate('1fr 1fr 1fr')
-          .columnsGap(6)
-          .rowsGap(8)
-          .height(32)
-          .alignSelf(ItemAlign.End)
-          .margin({bottom:10})
+            .width(231)
+            .columnsTemplate('1fr 1fr 1fr')
+
+            .columnsGap(6)
+            .rowsGap(8)
+            .height(118)
+            .alignSelf(ItemAlign.End)
+            .margin({ bottom: 5 })
+          }
           Row({ space: rvp(18) }) {
             Text('备注信息').width(rvp(56)).fontSize(md())
             TextArea({ placeholder: '请输入备注信息' }).textAreaStyles()

@@ -3,6 +3,7 @@ import { getRoomDetailApi } from '../../api/rentRoomDetail'
 
 import { IDiscountsList,
   IDistanceInfo,
+  IFormatDateList,
   IHouseholdList,
   IMetaInfoList,
   IRentInfoList,
@@ -22,6 +23,7 @@ import HouseholdItem from '../../views/RentRoomDetail/HouseholdItem'
 import SupportList from '../../views/RentRoomDetail/SupportList'
 import Book from '../../views/RentRoomDetail/Book'
 import BookInfo from '../../views/RentRoomDetail/BookInfo'
+import createDateList from '../../util/dateList'
 
 @Entry
 @Component
@@ -79,8 +81,10 @@ struct RentRoomDetail {
   @StorageProp('topHeight') topHeight: number = 0
   picScroller: Scroller = new Scroller()
   @State show: boolean = false
+
   aboutToAppear(): void {
     this.getRoomDetail()
+
   }
 
   getRoomDetail = async () => {
