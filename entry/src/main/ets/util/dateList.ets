@@ -3,12 +3,12 @@ import { IFormatDate, IFormatDateList } from '../models/RentRoomData'
 function formatDate(time:number){
   const date = new Date(time)
   const year = date.getFullYear()
-  const month = date.getMonth()-1
+  const month = addZero(date.getMonth()+1)
  const hao = date.getDate()
   const day = formatWeekText(hao)
   const tmp :IFormatDate= {
     week:day,
-    date:`${year}-${month}-${hao}`
+    date:`${year}-${month}-${addZero(hao)}`
   }
   return tmp
 }
@@ -40,4 +40,7 @@ function  formatWeekText(week:number) {
       default :
         return'周日'
   }
+}
+function addZero (val:number):string{
+  return val<10?'0'+val:val+''
 }

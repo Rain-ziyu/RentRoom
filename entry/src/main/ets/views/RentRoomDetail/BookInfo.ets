@@ -1,9 +1,11 @@
 import Drawer from '../../components/Drawer/Index'
 import { BORDER_RADIUS, BORDER_RADIUS_S, PADDING } from '../../constants/size'
-import { IFormatDate, IFormatDateList } from '../../models/RentRoomData'
+import { IFormatDate, IFormatDateList, IRentRoomParam, IReservationRoomParam } from '../../models/RentRoomData'
 import createDateList from '../../util/dateList'
 import rvp, { md, xl } from '../../util/responsive'
 import { faceDetector } from '@kit.CoreVisionKit'
+import { reservationRoomApi } from '../../api/rentRoomDetail'
+import { promptAction, router } from '@kit.ArkUI'
 
 
 @Component
@@ -12,7 +14,13 @@ export default struct BookInfo {
   @State isShowDateList: boolean = false
   @State dateList: IFormatDateList = createDateList()
   @State currentDate: IFormatDate = this.dateList[0]
-
+@State reservationData:IReservationRoomParam= {
+  name: '',
+  date: '',
+  houseId: '',
+  phone: '',
+  comment: ''
+}
   build() {
     Drawer({ show: $show, heights: 181 }) {
       Column({ space: rvp(16) }) {
@@ -21,11 +29,17 @@ export default struct BookInfo {
           Row({ space: rvp(18) }) {
             Text('姓名').width(rvp(56)).fontSize(md())
             TextInput({ placeholder: '请输入姓名' }).textInputStyles()
+              .onChange((name:string)=>{
+                this.reservationData.name=name
+              })
           }.width('100%')
 
           Row({ space: rvp(18) }) {
             Text('手机号').width(rvp(56)).fontSize(md())
             TextInput({ placeholder: '请输入手机号' }).type(InputType.PhoneNumber).maxLength(11).textInputStyles()
+              .onChange((phone:string)=>{
+                this.reservationData.phone=phone
+              })
           }.width('100%')
 
           Row({ space: rvp(18) }) {
@@ -77,6 +91,9 @@ export default struct BookInfo {
           Row({ space: rvp(18) }) {
             Text('备注信息').width(rvp(56)).fontSize(md())
             TextArea({ placeholder: '请输入备注信息' }).textAreaStyles()
+              .onChange((comment:string)=>{
+                this.reservationData.comment=comment
+              })
           }.width('100%').alignItems(VerticalAlign.Top)
         }
         .alignItems(HorizontalAlign.Start)
@@ -92,6 +109,15 @@ export default struct BookInfo {
           .fontSize(md())
           .backgroundColor($r('app.color.primary'))
           .borderRadius(rvp(2))
+          .onClick(async ()=>{
+           const params = router.getParams() as IRentRoomParam
+            this.reservationData.date = this.currentDate.date
+            this.reservationData.houseId =params.id
+            console.log(JSON.stringify( this.reservationData))
+           await reservationRoomApi( this.reservationData)
+            this.show = false
+            promptAction.showToast({message:'预约成功'})
+          })
       }.alignItems(HorizontalAlign.Start).padding({ bottom: rvp(PADDING) })
     }
   }
